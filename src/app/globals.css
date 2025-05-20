@@ -1,1 +1,20 @@
 @import "tailwindcss";
+
+
+.my-day {
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  color:red
+}
+
+.my-day:hover  {
+  background-color: #e2e8f0;
+  color: #000;
+}
+
+.available-day {
+  background-color: #cce7ff;
+  color: #000;
+  border-radius: 50%;
+}
