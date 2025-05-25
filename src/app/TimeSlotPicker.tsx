@@ -23,7 +23,7 @@ export default function TimeSlotsComponent({ selectedDate, timeSlots, selectedTi
   }, [filteredSlots.length, selectedDate]);
 
   return (
-    selectedDate && (
+    selectedDate ? (
       <div className="mb-4">
         <h3 className="text-lg font-semibold mb-4">Available Time Slots</h3>
 
@@ -78,6 +78,35 @@ export default function TimeSlotsComponent({ selectedDate, timeSlots, selectedTi
           </div>
         )}
       </div>
-    )
+    ): 
+    <div>
+             <h3 className="text-lg font-semibold mb-4">Available Time Slots</h3>
+
+<div className="mb-4  flex flex-col items-center justify-center text-center bg-yellow-50 text-yellow-700 border border-yellow-200 rounded p-6">
+        
+        <div className="shake flex flex-col items-center justify-center ">
+            <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-10 h-10 mb-3 text-yellow-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <p className="text-lg font-medium">No date selected</p>
+        <p className="text-sm text-yellow-700 mt-1">
+          Please select a date to see available time slots.
+        </p>
+        </div>
+      </div>
+
+    </div>
+    
   );
 }

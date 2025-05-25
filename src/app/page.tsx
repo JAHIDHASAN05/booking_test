@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -17,11 +18,14 @@ const event = {
 const availability = [
   {
     date: "2025-05-25",
-    slots: ["10:00", "11:00", "14:00", "16:00", "16:30", "17:00"],
+    slots: ["10:00", "11:00", "14:00", "16:00", "16:30", "18:00"],
   },
   {
     date: "2025-05-27",
-    slots: Array.from({ length: 24 }, (_, i) => `${i}:00`), // 24-hour slots
+    slots: Array.from(
+      { length: 24 },
+      (_, i) => `${i.toString().padStart(2, "0")}:00`
+    ),
   },
   {
     date: "2025-06-05",
@@ -33,7 +37,10 @@ const availability = [
   },
   {
     date: "2025-06-25",
-    slots: Array.from({ length: 24 }, (_, i) => `${i}:00`), // Another 24-hour day
+    slots: Array.from(
+      { length: 24 },
+      (_, i) => `${i.toString().padStart(2, "0")}:00`
+    ),
   },
   {
     date: "2025-07-10",
@@ -45,7 +52,10 @@ const availability = [
   },
   {
     date: "2025-07-25",
-    slots: Array.from({ length: 24 }, (_, i) => `${i}:00`), // One more 24-hour day
+    slots: Array.from(
+      { length: 24 },
+      (_, i) => `${i.toString().padStart(2, "0")}:00`
+    ),
   },
 ];
 
@@ -57,7 +67,7 @@ export default function BookingForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+
     setValue,
   } = useForm();
 
@@ -128,14 +138,16 @@ export default function BookingForm() {
   }
 
   return (
-    <div className="flex my-20 flex-col gap-8 p-10 border bg-white max-w-4xl mx-auto">
+    <div className="flex my-20 flex-col gap-8 p-5    sm:p-10 border bg-white max-w-4xl mx-auto">
       <div className="md:h-96 flex flex-col md:flex-row gap-5">
         <div className="w-full">
           <DayPicker
             mode="single"
-            selected={selectedDate}
+            // selected={selectedDate}
+            selected={selectedDate ?? undefined}
             onSelect={(date) => {
-              setSelectedDate(date);
+              setSelectedDate(date ?? null);
+
               setSelectedTime(null); // Reset selected time when date changes
             }}
             // disabled={[{ before: new Date() }]}
@@ -173,6 +185,7 @@ export default function BookingForm() {
             setSelectedTime={setSelectedTime}
           />
 
+          {/*           
           {selectedDate && (
             <div className="mb-4">
               <h3 className="text-lg font-semibold mb-4">
@@ -319,7 +332,7 @@ export default function BookingForm() {
                 </div>
               )}
             </div>
-          )}
+          )} */}
         </div>
 
         {/* {selectedDate && (
