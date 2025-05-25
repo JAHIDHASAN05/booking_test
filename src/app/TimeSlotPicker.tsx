@@ -1,6 +1,19 @@
+
 import { useEffect, useState } from "react";
 
-export default function TimeSlotsComponent({ selectedDate, timeSlots, selectedTime, setSelectedTime }) {
+type TimeSlotsComponentProps = {
+  selectedDate: Date | null;
+  timeSlots: string[];
+  selectedTime: string | null;
+  setSelectedTime: (time: string) => void;
+};
+
+export default function TimeSlotsComponent({
+  selectedDate,
+  timeSlots,
+  selectedTime,
+  setSelectedTime,
+}: TimeSlotsComponentProps) {
   const [shakeKey, setShakeKey] = useState(0);
 
   // Check if no available slots (filtered)
