@@ -1,14 +1,13 @@
 @import "tailwindcss";
 
-
 .my-day {
   padding: 0.5rem;
   border-radius: 50%;
   transition: all 0.2s ease;
-  color:red
+  color: red;
 }
 
-.my-day:hover  {
+.my-day:hover   {
   background-color: #e2e8f0;
   color: #000;
 }
@@ -17,4 +16,47 @@
   background-color: #cce7ff;
   color: #000;
   border-radius: 50%;
+}
+
+
+
+
+
+.rdp-month > table {
+  /* border: 1px solid black !important; */
+  border-radius: 8px !important;
+  overflow: hidden;
+  border-collapse: separate;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+
+.rdp-day_disabled {
+  cursor:not-allowed !important;
+  opacity: 0.5;
+}
+
+
+.rdp-disabled >button{
+  cursor:not-allowed !important;
+}
+.rdp-day_button{
+
+    /* cursor:not-allowed !important; */
+}
+
+
+
+.rdp-selected {
+  background: transparent !important;
+  /* border: 1px solid black !important; */
+  border-radius: 100% !important;
+}
+
+.rdp-selected .rdp-day_button {
+  /* border:0 !important
+   */
+
+  background: lightblue;
 }
