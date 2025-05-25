@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import "react-day-picker/style.css";
+import TimeSlotsComponent from "./TimeSlotPicker";
 
 // Dummy event and availability
 const event = {
@@ -16,7 +17,7 @@ const event = {
 const availability = [
   {
     date: "2025-05-25",
-    slots: ["10:00", "11:00", "14:00", "16:00", "16:30","17:00"],
+    slots: ["10:00", "11:00", "14:00", "16:00", "16:30", "17:00"],
   },
   {
     date: "2025-05-27",
@@ -165,152 +166,163 @@ export default function BookingForm() {
           />
         </div>
         <div className="w-full h-full md:overflow-y-scroll">
-          {selectedDate && (
-  <div className="mb-4">
-    <h3 className="text-lg font-semibold mb-4">Available Time Slots</h3>
-
-    {timeSlots.filter((slot) => {
-      const now = new Date();
-      const isToday = selectedDate.toDateString() === now.toDateString();
-      const [hour, minute] = slot.split(":").map(Number);
-      const slotTime = new Date(selectedDate);
-      slotTime.setHours(hour, minute, 0, 0);
-      return !isToday || slotTime > now;
-    }).length === 0 ? (
-      <div className="shake flex flex-col items-center justify-center text-center bg-yellow-50 text-yellow-700 border border-yellow-200 rounded p-6">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-10 h-10 mb-3 text-yellow-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          <TimeSlotsComponent
+            selectedDate={selectedDate}
+            timeSlots={timeSlots}
+            selectedTime={selectedTime}
+            setSelectedTime={setSelectedTime}
           />
-        </svg>
-        <p className="text-lg font-medium">No available time slots</p>
-        <p className="text-sm text-gray-600 mt-1">
-          Please choose another day or check back later.
-        </p>
-      </div>
-    ) : (
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
-        {timeSlots
-          .filter((slot) => {
-            const now = new Date();
-            const isToday = selectedDate.toDateString() === now.toDateString();
-            const [hour, minute] = slot.split(":").map(Number);
-            const slotTime = new Date(selectedDate);
-            slotTime.setHours(hour, minute, 0, 0);
-            return !isToday || slotTime > now;
-          })
-          .map((slot) => {
-            const [hour, minute] = slot.split(":").map(Number);
-            const ampm = hour >= 12 ? "PM" : "AM";
-            const hour12 = hour % 12 || 12;
-            const formatted = `${hour12}:${minute
-              .toString()
-              .padStart(2, "0")} ${ampm}`;
-
-            return (
-              <button
-                key={slot}
-                onClick={() => setSelectedTime(slot)}
-                className={`px-3 py-2 rounded border transition ${
-                  selectedTime === slot
-                    ? "bg-blue-600 text-white"
-                    : "bg-white hover:bg-blue-100"
-                }`}
-              >
-                {formatted}
-              </button>
-            );
-          })}
-      </div>
-    )}
-  </div>
-)}
 
           {selectedDate && (
-  <div className="mb-4   ">
-    <h3 className="text-lg font-semibold mb-4">Available Time Slots</h3>
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold mb-4">
+                Available Time Slots
+              </h3>
 
-    {timeSlots.filter((slot) => {
-      const now = new Date();
-      const isToday = selectedDate.toDateString() === now.toDateString();
-      const [hour, minute] = slot.split(":").map(Number);
-      const slotTime = new Date(selectedDate);
-      slotTime.setHours(hour, minute, 0, 0);
-      return !isToday || slotTime > now;
-    }).length === 0 ? (
-     
-      <div className="flex shake mt-10  flex-col items-center justify-center text-center bg-yellow-50 text-yellow-700 border border-yellow-200 rounded p-6">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-10 h-10 mb-3 text-yellow-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-        <p className="text-lg font-medium">No available time slots</p>
-        <p className="text-sm text-gray-600 mt-1">
-          Please choose another day or check back later.
-        </p>
-      </div>
-    ) : (
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
-        {timeSlots
-          .filter((slot) => {
-            const now = new Date();
-            const isToday = selectedDate.toDateString() === now.toDateString();
-            const [hour, minute] = slot.split(":").map(Number);
-            const slotTime = new Date(selectedDate);
-            slotTime.setHours(hour, minute, 0, 0);
-            return !isToday || slotTime > now;
-          })
-          .map((slot) => {
-            const [hour, minute] = slot.split(":").map(Number);
-            const ampm = hour >= 12 ? "PM" : "AM";
-            const hour12 = hour % 12 || 12;
-            const formatted = `${hour12}:${minute
-              .toString()
-              .padStart(2, "0")} ${ampm}`;
+              {timeSlots.filter((slot) => {
+                const now = new Date();
+                const isToday =
+                  selectedDate.toDateString() === now.toDateString();
+                const [hour, minute] = slot.split(":").map(Number);
+                const slotTime = new Date(selectedDate);
+                slotTime.setHours(hour, minute, 0, 0);
+                return !isToday || slotTime > now;
+              }).length === 0 ? (
+                <div className="shake flex flex-col items-center justify-center text-center bg-yellow-50 text-yellow-700 border border-yellow-200 rounded p-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-10 h-10 mb-3 text-yellow-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <p className="text-lg font-medium">No available time slots</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Please choose another day or check back later.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
+                  {timeSlots
+                    .filter((slot) => {
+                      const now = new Date();
+                      const isToday =
+                        selectedDate.toDateString() === now.toDateString();
+                      const [hour, minute] = slot.split(":").map(Number);
+                      const slotTime = new Date(selectedDate);
+                      slotTime.setHours(hour, minute, 0, 0);
+                      return !isToday || slotTime > now;
+                    })
+                    .map((slot) => {
+                      const [hour, minute] = slot.split(":").map(Number);
+                      const ampm = hour >= 12 ? "PM" : "AM";
+                      const hour12 = hour % 12 || 12;
+                      const formatted = `${hour12}:${minute
+                        .toString()
+                        .padStart(2, "0")} ${ampm}`;
 
-            return (
-              <button
-                key={slot}
-                onClick={() => setSelectedTime(slot)}
-                className={`px-3 py-2 rounded border transition ${
-                  selectedTime === slot
-                    ? "bg-blue-600 text-white"
-                    : "bg-white hover:bg-blue-100"
-                }`}
-              >
-                {formatted}
-              </button>
-            );
-          })}
-      </div>
-    )}
-  </div>
-)}
+                      return (
+                        <button
+                          key={slot}
+                          onClick={() => setSelectedTime(slot)}
+                          className={`px-3 py-2 rounded border transition ${
+                            selectedTime === slot
+                              ? "bg-blue-600 text-white"
+                              : "bg-white hover:bg-blue-100"
+                          }`}
+                        >
+                          {formatted}
+                        </button>
+                      );
+                    })}
+                </div>
+              )}
+            </div>
+          )}
 
-</div>
+          {selectedDate && (
+            <div className="mb-4   ">
+              <h3 className="text-lg font-semibold mb-4">
+                Available Time Slots
+              </h3>
 
+              {timeSlots.filter((slot) => {
+                const now = new Date();
+                const isToday =
+                  selectedDate.toDateString() === now.toDateString();
+                const [hour, minute] = slot.split(":").map(Number);
+                const slotTime = new Date(selectedDate);
+                slotTime.setHours(hour, minute, 0, 0);
+                return !isToday || slotTime > now;
+              }).length === 0 ? (
+                <div className="flex shake mt-10  flex-col items-center justify-center text-center bg-yellow-50 text-yellow-700 border border-yellow-200 rounded p-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-10 h-10 mb-3 text-yellow-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <p className="text-lg font-medium">No available time slots</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Please choose another day or check back later.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
+                  {timeSlots
+                    .filter((slot) => {
+                      const now = new Date();
+                      const isToday =
+                        selectedDate.toDateString() === now.toDateString();
+                      const [hour, minute] = slot.split(":").map(Number);
+                      const slotTime = new Date(selectedDate);
+                      slotTime.setHours(hour, minute, 0, 0);
+                      return !isToday || slotTime > now;
+                    })
+                    .map((slot) => {
+                      const [hour, minute] = slot.split(":").map(Number);
+                      const ampm = hour >= 12 ? "PM" : "AM";
+                      const hour12 = hour % 12 || 12;
+                      const formatted = `${hour12}:${minute
+                        .toString()
+                        .padStart(2, "0")} ${ampm}`;
 
+                      return (
+                        <button
+                          key={slot}
+                          onClick={() => setSelectedTime(slot)}
+                          className={`px-3 py-2 rounded border transition ${
+                            selectedTime === slot
+                              ? "bg-blue-600 text-white"
+                              : "bg-white hover:bg-blue-100"
+                          }`}
+                        >
+                          {formatted}
+                        </button>
+                      );
+                    })}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
-          {/* {selectedDate && (
+        {/* {selectedDate && (
             <div className="mb-4">
               <h3 className="text-lg font-semibold mb-2">
                 Available Time Slots
@@ -358,7 +370,7 @@ export default function BookingForm() {
             </div>
           )} */}
 
-          {/* {selectedDate ? (
+        {/* {selectedDate ? (
             <div className="mb-4">
               <h3 className="text-lg font-semibold mb-2">
                 Available Time Slots
@@ -389,10 +401,6 @@ export default function BookingForm() {
           )}
         </div> */}
       </div>
-
-
-
-
 
       {selectedTime && (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
