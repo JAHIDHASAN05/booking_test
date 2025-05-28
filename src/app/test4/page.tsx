@@ -1,15 +1,14 @@
 'use client'
 
-import { useState } from 'react'
 import {
-  format,
   addDays,
-  isSameDay,
-  startOfToday,
+  format,
+  startOfToday
 } from 'date-fns'
+import { useState } from 'react'
 
 // Constants
-const MAX_WEEKS_AHEAD = 4
+const MAX_WEEKS_AHEAD = 8
 const DAYS_PER_WEEK = 7
 
 // Dummy slot fetcher
@@ -32,7 +31,7 @@ export default function BookingModal() {
   const [weekOffset, setWeekOffset] = useState(0)
 
   const weekDates = generateWeek(weekOffset)
-  const today = startOfToday()
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">

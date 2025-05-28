@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { format, addDays, startOfWeek, isSameDay } from 'date-fns'
+import { format, addDays, startOfWeek,  } from 'date-fns'
 
 // Dummy data: slots only for these specific dates
 const slotMap: Record<string, string[]> = {

@@ -138,7 +138,10 @@ export default function BookingForm() {
   }
 
   return (
-    <div className="flex my-20 flex-col gap-8 p-5    sm:p-10 border bg-white max-w-4xl mx-auto">
+
+    <div className="px-2 fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    {/* // <div className=""> */}
+ <div className="flex rounded-md w-full my-20 flex-col gap-8 p-5    sm:p-10 border bg-white max-w-4xl mx-auto">
       <div className="md:h-96 flex flex-col md:flex-row gap-5">
         <div className="w-full">
           <DayPicker
@@ -450,5 +453,7 @@ export default function BookingForm() {
         </form>
       )}
     </div>
+    </div>
+   
   );
 }
