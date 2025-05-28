@@ -21,7 +21,7 @@ const availability = [
     slots: ["10:00", "11:00", "14:00", "16:00", "16:30", "18:00"],
   },
   {
-    date: "2025-05-27",
+    date: "2025-05-28",
     slots: Array.from(
       { length: 24 },
       (_, i) => `${i.toString().padStart(2, "0")}:00`
@@ -117,7 +117,7 @@ export default function BookingForm() {
         (day) => day.date === format(selectedDate, "yyyy-MM-dd")
       )?.slots || []
     : [];
-
+console.log(timeSlots);
   if (successData) {
     return (
       <div className="text-center p-10 border bg-white">

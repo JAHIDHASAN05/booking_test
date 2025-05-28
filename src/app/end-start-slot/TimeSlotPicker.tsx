@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-
+import { format } from "date-fns";
 type TimeSlotsComponentProps = {
   selectedDate: Date | null;
   timeSlots: string[];
@@ -17,18 +17,29 @@ export default function TimeSlotsComponent({
   const [shakeKey, setShakeKey] = useState(0);
 
   // Check if no available slots (filtered)
-  const now = new Date();
-  const isToday = selectedDate?.toDateString() === now.toDateString();
+  
 
-  const filteredSlots = timeSlots.filter((slot) => {
-    if (!selectedDate) return false;
-    const [hour, minute] = slot.split(":").map(Number);
-    const slotTime = new Date(selectedDate);
-    slotTime.setHours(hour, minute, 0, 0);
-    return !isToday || slotTime > now;
-  });
-  console.log(filteredSlots);
 
+const today = new Date().toISOString().split("T")[0];
+const now = new Date();
+
+const filteredSlots = timeSlots
+  .filter(({ date }) => date >= today) // keep today or future dates only
+  .map(({ date, slots }) => {
+    const filteredSlots = slots.filter(({ start }) => {
+      if (date > today) return true; // future dates: keep all
+
+      // for today, check if slot's start time is in the future
+      const [hour, minute] = start.split(":").map(Number);
+      const slotTime = new Date(date);
+      slotTime.setHours(hour, minute, 0, 0);
+      return slotTime > now;
+    });
+
+    return { date, slots: filteredSlots };
+  })
+  .filter(({ slots }) => slots.length > 0); // remove dates with no valid slots
+   console.log(filteredSlots,'ffffffffffff');
   // When no slots, update shakeKey to retrigger animation
   useEffect(() => {
     if (filteredSlots.length === 0) {
@@ -36,12 +47,83 @@ export default function TimeSlotsComponent({
     }
   }, [filteredSlots.length, selectedDate]);
 
+
+
+
+
+const filtered = filteredSlots
+  .filter((day) => {
+    // Match today only
+    const isToday = day.date === format(selectedDate || today, "yyyy-MM-dd");
+    return isToday;
+  })
+  .map((day) => {
+    const slots = day.slots.filter(({ end }) => {
+      const [endH, endM] = end.split(":").map(Number);
+      const endTime = new Date(day.date);
+      endTime.setHours(endH, endM, 0, 0);
+      return endTime > now;
+    });
+
+    return {
+      date: day.date,
+      slots,
+    };
+  })
+  .filter((day) => day.slots.length > 0); // Remove empty days
+
+
+
+console.log(filtered,format(selectedDate || today, "yyyy-MM-dd"));
+
+
   return (
     selectedDate ? (
       <div className="mb-4">
         <h3 className="text-lg font-semibold mb-4">Available Time Slots</h3>
 
-        {filteredSlots.length === 0 ? (
+<div className="grid grid-cols-2  lg:grid-cols-3  gap-2">
+  {filtered.map(({ date, slots }) =>
+    slots.map((slot) => {
+      const [startHour, startMinute] = slot.start.split(":").map(Number);
+      const [endHour, endMinute] = slot.end.split(":").map(Number);
+
+      const formatTime = (hour: number, minute: number) => {
+        const ampm = hour >= 12 ? "PM" : "AM";
+        const hour12 = hour % 12 || 12;
+        return `${hour12}:${minute.toString().padStart(2, "0")} ${ampm}`;
+      };
+
+      const formattedStart = formatTime(startHour, startMinute);
+      const formattedEnd = formatTime(endHour, endMinute);
+
+      return (
+        <button
+          key={`${date}-${slot.start}-${slot.end}`}
+          onClick={() => setSelectedTime(slot.start)}
+          className={`px-3 flex items-center justify-center  py-2 rounded border transition  ${
+            selectedTime === slot.start
+              ? "bg-blue-600 text-white"
+              : "bg-white hover:bg-blue-100"
+          }`}
+        >
+          {formattedStart}
+                  -
+          { formattedEnd}
+          
+          </button>
+      );
+    })
+  )}
+</div>
+
+
+
+
+
+
+
+        {/* {filteredSlots.length === 0 ? (
           <div
             key={shakeKey} // key change forces React to remount this div, retriggering animation
             className=" flex flex-col items-center justify-center text-center bg-yellow-50 text-yellow-700 border border-yellow-200 rounded p-6"
@@ -90,7 +172,7 @@ export default function TimeSlotsComponent({
               );
             })}
           </div>
-        )}
+        )} */}
       </div>
     ): 
     <div>
