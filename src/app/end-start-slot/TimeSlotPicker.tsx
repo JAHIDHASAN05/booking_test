@@ -39,7 +39,7 @@ const filteredSlots = timeSlots
     return { date, slots: filteredSlots };
   })
   .filter(({ slots }) => slots.length > 0); // remove dates with no valid slots
-   console.log(filteredSlots,'ffffffffffff');
+  
   // When no slots, update shakeKey to retrigger animation
   useEffect(() => {
     if (filteredSlots.length === 0) {
@@ -53,25 +53,11 @@ const filteredSlots = timeSlots
 
 const filtered = filteredSlots
   .filter((day) => {
-    // Match today only
-    const isToday = day.date === format(selectedDate || today, "yyyy-MM-dd");
-    return isToday;
+    // Only match the selected date (no time check)
+    const isSelectedDate = day.date === format(selectedDate || today, "yyyy-MM-dd");
+    return isSelectedDate;
   })
-  .map((day) => {
-    const slots = day.slots.filter(({ end }) => {
-      const [endH, endM] = end.split(":").map(Number);
-      const endTime = new Date(day.date);
-      endTime.setHours(endH, endM, 0, 0);
-      return endTime > now;
-    });
-
-    return {
-      date: day.date,
-      slots,
-    };
-  })
-  .filter((day) => day.slots.length > 0); // Remove empty days
-
+  .filter((day) => day.slots.length > 0); 
 
 
 console.log(filtered,format(selectedDate || today, "yyyy-MM-dd"));

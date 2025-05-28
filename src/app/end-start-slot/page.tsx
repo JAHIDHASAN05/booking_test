@@ -95,7 +95,7 @@ type ConvertedSlot = {
 };
 
 type ConvertedAvailability = {
-
+ teacherId:string,
   date: string; // YYYY-MM-DD
   slots: ConvertedSlot[];
 };
@@ -103,7 +103,6 @@ type ConvertedAvailability = {
 export function convertAvailability(data: TeacherAvailability[]): ConvertedAvailability[] {
   const result: ConvertedAvailability[] = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   data.forEach(({ teacherId, slots }) => {
     const dateMap: Record<string, ConvertedSlot[]> = {};
 
@@ -132,7 +131,7 @@ export function convertAvailability(data: TeacherAvailability[]): ConvertedAvail
 
     Object.entries(dateMap).forEach(([date, slots]) => {
       result.push({
-  
+      teacherId,
         date,
         slots,
       });
@@ -148,7 +147,7 @@ export function convertAvailability(data: TeacherAvailability[]): ConvertedAvail
 
 
 const availability = convertAvailability(apiAvailability);
-console.log(availability);
+
 
 
 
@@ -215,11 +214,6 @@ export default function BookingForm() {
   const availableDays = availability.map((day) => new Date(day.date));
   // console.log(availableDays,'days');
 
-  const timeSlots = selectedDate
-    ? availability.find(
-        (day) => day.date === format(selectedDate, "yyyy-MM-dd")
-      )?.slots || []
-    : [];
     
 
   if (successData) {
