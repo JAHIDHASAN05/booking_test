@@ -49,7 +49,7 @@ const apiAvailability = [
       { start: "2025-05-28T14:00:00.000Z", end: "2025-05-28T15:00:00.000Z" },
       { start: "2025-05-28T15:00:00.000Z", end: "2025-05-28T16:00:00.000Z" },
       { start: "2025-05-28T16:00:00.000Z", end: "2025-05-28T17:00:00.000Z" },
-      { start: "2025-05-28T17:00:00.000Z", end: "2025-05-28T18:00:00.000Z" },
+      { start: "2025-05-28T16:38:00.000Z", end: "2025-05-28T18:00:00.000Z" },
       { start: "2025-05-28T18:00:00.000Z", end: "2025-05-28T19:00:00.000Z" },
       { start: "2025-05-28T19:00:00.000Z", end: "2025-05-28T20:00:00.000Z" },
       { start: "2025-05-28T20:00:00.000Z", end: "2025-05-28T21:00:00.000Z" },
@@ -209,10 +209,32 @@ export default function BookingForm() {
 
     console.log("Submitted Booking:", selectedDate,selectedTime);
     setSuccessData(bookingData);
-  };
+  }
+const today = new Date().toISOString().split("T")[0];
+const now = new Date();
+const filteredSlots = availability
+  .filter(({ date }) => date >= today) // keep today or future dates only
+  .map(({ date, slots }) => {
+    const filteredSlots = slots.filter(({ start }) => {
+      if (date > today) return true; // future dates: keep all
 
-  const availableDays = availability.map((day) => new Date(day.date));
-  // console.log(availableDays,'days');
+      // for today, check if slot's start time is in the future
+      const [hour, minute] = start.split(":").map(Number);
+      const slotTime = new Date(date);
+      slotTime.setHours(hour, minute, 0, 0);
+      return slotTime > now;
+    });
+
+    return { date, slots: filteredSlots };
+  })
+  .filter(({ slots }) => slots.length > 0); // remove dates with no valid slots
+  
+ 
+
+
+
+  const availableDays = filteredSlots.map((day) => new Date(day.date));
+  console.log(availableDays);
 
     
 

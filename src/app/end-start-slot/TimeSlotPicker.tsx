@@ -51,7 +51,7 @@ const filteredSlots = timeSlots
 
 
 
-const filtered = filteredSlots
+const SelectedSlote = filteredSlots
   .filter((day) => {
     // Only match the selected date (no time check)
     const isSelectedDate = day.date === format(selectedDate || today, "yyyy-MM-dd");
@@ -60,7 +60,7 @@ const filtered = filteredSlots
   .filter((day) => day.slots.length > 0); 
 
 
-console.log(filtered,format(selectedDate || today, "yyyy-MM-dd"));
+console.log(SelectedSlote,format(selectedDate || today, "yyyy-MM-dd"));
 
 
   return (
@@ -69,7 +69,7 @@ console.log(filtered,format(selectedDate || today, "yyyy-MM-dd"));
         <h3 className="text-lg font-semibold mb-4">Available Time Slots</h3>
 
 <div className="grid grid-cols-2  lg:grid-cols-3  gap-2">
-  {filtered.map(({ date, slots }) =>
+  {SelectedSlote.map(({ date, slots }) =>
     slots.map((slot) => {
       const [startHour, startMinute] = slot.start.split(":").map(Number);
       const [endHour, endMinute] = slot.end.split(":").map(Number);
