@@ -49,7 +49,7 @@ const apiAvailability = [
       { start: "2025-05-28T14:00:00.000Z", end: "2025-05-28T15:00:00.000Z" },
       { start: "2025-05-28T15:00:00.000Z", end: "2025-05-28T16:00:00.000Z" },
       { start: "2025-05-28T16:00:00.000Z", end: "2025-05-28T17:00:00.000Z" },
-      { start: "2025-05-28T16:38:00.000Z", end: "2025-05-28T18:00:00.000Z" },
+      { start: "2025-05-28T17:10:00.000Z", end: "2025-05-28T18:00:00.000Z" },
       { start: "2025-05-28T18:00:00.000Z", end: "2025-05-28T19:00:00.000Z" },
       { start: "2025-05-28T19:00:00.000Z", end: "2025-05-28T20:00:00.000Z" },
       { start: "2025-05-28T20:00:00.000Z", end: "2025-05-28T21:00:00.000Z" },
@@ -100,7 +100,7 @@ type ConvertedAvailability = {
   slots: ConvertedSlot[];
 };
 
-export function convertAvailability(data: TeacherAvailability[]): ConvertedAvailability[] {
+ function convertAvailability(data: TeacherAvailability[]): ConvertedAvailability[] {
   const result: ConvertedAvailability[] = [];
 
   data.forEach(({ teacherId, slots }) => {
@@ -293,7 +293,7 @@ const filteredSlots = availability
           <div className="w-full h-full md:overflow-y-scroll">
             <TimeSlotsComponent
               selectedDate={selectedDate}
-              timeSlots={availability}
+              timeSlots={filteredSlots}
               selectedTime={selectedTime}
               setSelectedTime={setSelectedTime}
             />

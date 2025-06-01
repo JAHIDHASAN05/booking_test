@@ -7,6 +7,7 @@ import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import "react-day-picker/style.css";
 import TimeSlotsComponent from "./TimeSlotPicker";
+import { toast } from "sonner";
 
 // Dummy event and availability
 const event = {
@@ -16,17 +17,18 @@ const event = {
 };
 
 const availability = [
+   {
+    date: "2025-06-02",
+    slots: ["16:30", "17:00", "19:30", "19:00" ,"20:00", "20:30","22:00","23:00" ],
+  }, 
   {
-    date: "2025-05-25",
-    slots: ["10:00", "11:00", "14:00", "16:00", "16:30", "18:00"],
-  },
-  {
-    date: "2025-05-28",
+    date: "2025-06-22",
     slots: Array.from(
       { length: 24 },
       (_, i) => `${i.toString().padStart(2, "0")}:00`
     ),
   },
+
   {
     date: "2025-06-05",
     slots: ["09:00", "12:00", "15:00", "18:00"],
@@ -101,7 +103,7 @@ export default function BookingForm() {
       startTime: startTime.toISOString(),
       endTime: endTime.toISOString(),
       additionalInfo: data.additionalInfo,
-      meetLink: `https://meet.fake.com/${Math.random()
+      meetLink: `https://meet.keenlys.com/${Math.random()
         .toString(36)
         .substring(2, 8)}`,
     };
@@ -118,6 +120,40 @@ export default function BookingForm() {
       )?.slots || []
     : [];
 console.log(timeSlots);
+
+
+  useEffect(() => {
+    const handleClick = (e:any) => {
+      // Check if clicked element (or ancestor) has either class
+      const button = 
+        e.target.closest('.rdp-button_next') || 
+        e.target.closest('.rdp-button_previous');
+          
+     
+      if (button?.getAttribute('aria-disabled') === 'true') {
+        toast.error("", {
+          description: button.classList.contains('rdp-button_next') 
+            ? "Next Month unavailable" 
+            : "Previous Month unavailable"
+        });    
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, []);     
+
+
+
+
+
+
+
+
+
+
   if (successData) {
     return (
       <div className="text-center p-10 border bg-white">
@@ -139,8 +175,8 @@ console.log(timeSlots);
 
   return (
 
-    <div className="px-2 fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-    {/* // <div className=""> */}
+    // <div className="px-2 fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+     <div className=""> 
  <div className="flex rounded-md w-full my-20 flex-col gap-8 p-5    sm:p-10 border bg-white max-w-4xl mx-auto">
       <div className="md:h-96 flex flex-col md:flex-row gap-5">
         <div className="w-full">
@@ -159,18 +195,15 @@ console.log(timeSlots);
               {
                 after: new Date(new Date().setMonth(new Date().getMonth() + 2)),
               },
+
             ]}
+            // fromMonth={new Date()} // restrict backward navigation
+            // toMonth={new Date(new Date().setMonth(new Date().getMonth() + 2))} // restrict forward navigation
+
+
+
             modifiers={{ available: availableDays }}
-            //             classNames={{
-            //   day: "my-day",
-            //   day_selected: "bg-green-500 text-white",
-            //   day_today: "text-blue-600 font-bold",
-            //   day_disabled: "text-gray-400 cursor-not-allowed",
-            //   day_available: "bg-yellow-100 text-black",
-            //   nav_button: "text-black hover:bg-gray-200",
-            //   caption_label: "text-lg font-semibold",
-            //   // more classes can be customized as needed
-            // }}
+       
 
             modifiersStyles={{
               available: {
@@ -180,7 +213,7 @@ console.log(timeSlots);
             }}
           />
         </div>
-        <div className="w-full h-full md:overflow-y-scroll">
+        <div className="w-full h-full md:overflow-y-auto">
           <TimeSlotsComponent
             selectedDate={selectedDate}
             timeSlots={timeSlots}
